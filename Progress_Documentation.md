@@ -76,7 +76,39 @@ Now that we proved this thing could work for tracking characters - I started to 
 
 <img src="images/more_progress.jpg" width = 100%/>
 
-Now that we know things can work, we really just need to annotate the rest of our data. Which sounds horrible and might cause my death. So we're going to try something a little sneaky. 
+Now that we know things can work, we really just need to annotate the rest of our data. Which can now be accelerated since we've got a starter model up and running
 
-## Modeling to Draft Annotations
-Label Studio uses and SQLITE3 database to store everything. What if we use our in-progress model to make predictions on all images we still need to annotate, then use some python SQL magic to add those predictions to that SQLITE3 database as draft annotations? Then I can open them up and review/edit those annotations without having to make them all from scratch. It'd be complicated to get up and running but I'd much rather do that than draw more boxes. In progress now!
+## Adding an ML Predictive Backend to Label Studio
+It took me about a minute to fully annotate an image for this project. Drawing boxes over the clock, two characters, two sets of stocks, and two damage percents isn't quick! Assuming I wanted another 10k image we'd be looking at about almost 170 hours of work, which sounds like an absolute nightmare. Luckily Label Studio supports a [really cool feature](https://labelstud.io/guide/ml_create.html) that lets you use a model to pre-annotate images. So now that I had a base model, I could use that model to automatically add some starter annotations for the things it was performing well on, like the clock, stocks, and damages.
+
+Now I know what you're thinking - "Brian isn't this a great way to introduce bias into your data since it could reinforce bad weights if it keeps getting trained on bad behavior?". Yes it absolutely could! But I'm acting as the arbiter of bad annotations. So even if my model adds a predicted annotation I'm still going to preview and edit it before I let it get anywhere near training. The pre-annotation will just save me time in that I only need to adjust a label rather than draw it from scratch. 
+
+Actually implementing this backend was really difficult for me, the documentation wasn't as detailed as I would have liked. The instructions were more or less
+1. Clone the repo [https://github.com/HumanSignal/label-studio-ml-backend/tree/master](https://github.com/HumanSignal/label-studio-ml-backend/tree/master) (okay easy enough)
+2. `pip` install it (no problem, done this hundreds of times)
+3. Write a `predict` function in `model.py` that takes a structure called `tasks` and returns the results in a JSON structure that Label Studio accepts
+<p><img src="images/visible_confusion.png" width = 30%/></p>
+4. Spin up the server and connect :)
+<p><img src="images/krabs.png" width = 30%/></p>
+
+I spent hours and hours pouring over the little documentation I could find. I looked through all of the examples in that repo. Heck I even looked through the SQLITE3 database that Label Studio use to store everything to try to understand the data structures I needed to mimic. And then finally I got it all working. Now when I open images to annotate in Label Studio I am greated with this beautiful sight
+<img src="images/label_with_predictions.png" width = 100%/>
+The clock, stocks, and damages are basically always pre-labeled, which saves me a TON of time. So now I just need to draw boxes for the characters, and then adjust the predicted labels (like the clock on the image above). Best of all, this created a full on ML accelerated pipeline for me to use. I could label images, then train a new model using the new labels to make better models, then use those better models to spend less time labeling.
+<p><img src="images/ml_pipeline.png" width = 50%/></p>
+Using I pipeline described above, I anticipate my time spent labeling images would drop dramatically over time.
+<p><img src="images/image_time_chart.png" width = 50%/></p>
+
+This is where I'm at now in the project and will spend the rest of my years doing this
+
+
+
+
+
+
+
+
+
+
+
+
+
