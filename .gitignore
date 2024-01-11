@@ -52,4 +52,5 @@ docs/_build/
 # Data
 *.csv
 *.png
+*.jpg
 *.xml
