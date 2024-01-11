@@ -54,3 +54,7 @@ docs/_build/
 *.png
 *.jpg
 *.xml
+*.json
+*.pth
+*.txt
+*.ipynb_checkpoints
