@@ -1,0 +1,20 @@
+[project]
+name = "melee_analytics_platform"
+description = "package for doing analytics on smash melee games"
+version = "0.1.0"
+authors = [
+    { name = "Brian Funk", email = "brianfunk3.0@gmail.com" }
+]
+dependencies = [
+    "albumentations",
+    "beautifulsoup4",
+    "opencv-python",
+    "Pillow",
+    "selenium",
+    "torch",
+    "torchvision",
+    "youtube-dl"
+]
+
+[tool.setuptools]
+py-modules = []
