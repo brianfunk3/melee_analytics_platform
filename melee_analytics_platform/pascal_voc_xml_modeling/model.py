@@ -34,7 +34,8 @@ class Model():
         # define a new head for the detector with required number of classes
         self.model.roi_heads.box_predictor = FastRCNNPredictor(in_features, len(self.classes))
         # see if a model checkpoint exists
-        if os.path.isfile('projects/{self.project_name}/outputs/{self.project_dir}/model.pth'):
+        if os.path.isfile(f'projects/{self.project_name}/outputs/{self.project_dir}/model.pth'):
+            print('loading model state')
             checkpoint = torch.load(f'projects/{self.project_name}/outputs/{self.project_dir}/model.pth', map_location=self.device)
             self.model.load_state_dict(checkpoint['model_state_dict'])
 
@@ -118,12 +119,14 @@ class Model():
         Given an image and project name, make some predictions and return it.
         image is already a lil numpy thing
         """
+        print(detection_threshold)
         # check if we need to switch to eval mode
         if self.model.training:
             self.model.eval()
 
         # BGR to RGB
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
+        cv2.imwrite('my_image.jpg', image)
         
         # make the pixel range between 0 and 1
         image /= 255.0
@@ -142,11 +145,12 @@ class Model():
         if len(outputs[0]['boxes']) != 0:
             boxes = outputs[0]['boxes'].data.numpy()
             scores = outputs[0]['scores'].data.numpy()
-            # filter out boxes according to `detection_threshold`
+            # filter according to `detection_threshold`
             boxes = boxes[scores >= detection_threshold].astype(np.int32)
-            draw_boxes = boxes.copy()
             # get all the predicited class names
-            pred_classes = [self.classes[i] for i in outputs[0]['labels'].cpu().numpy()]
+            pred_classes = np.array([self.classes[i] for i in outputs[0]['labels'].cpu().numpy()])
+            pred_classes = pred_classes[scores >= detection_threshold]
+            scores = scores[scores >= detection_threshold]
 
             return boxes, scores, pred_classes
         else:
