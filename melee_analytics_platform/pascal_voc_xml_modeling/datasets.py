@@ -1,3 +1,5 @@
+from melee_analytics_platform.pascal_voc_xml_modeling.custom_utils import collate_fn, get_train_transform, get_valid_transform
+from melee_analytics_platform.pascal_voc_xml_modeling.data_utils import read_json
 import torch
 import cv2
 import numpy as np
@@ -5,8 +7,7 @@ import os
 import glob as glob
 from xml.etree import ElementTree as et
 from torch.utils.data import Dataset, DataLoader
-from melee_analytics_platform.pascal_voc_xml_modeling.custom_utils import collate_fn, get_train_transform, get_valid_transform
-from melee_analytics_platform.pascal_voc_xml_modeling.data_utils import get_classes
+
 # the dataset class
 class CustomDataset(Dataset):
     def __init__(self, project_name, project_run, width, height, img_list, transforms=None):
@@ -15,7 +16,7 @@ class CustomDataset(Dataset):
         self.height = height
         self.width = width
         self.img_list = img_list
-        self.classes = get_classes(project_name, project_run)
+        self.classes = read_json(f'projects/{project_name}/outputs/{project_run}', 'run_params')['classes']
         
         # get all the image paths in sorted order
         #self.image_paths = glob.glob(f"projects/{self.project_name}/{self.mode}/*.jpg")

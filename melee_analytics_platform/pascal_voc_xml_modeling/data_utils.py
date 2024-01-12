@@ -40,12 +40,6 @@ def get_class_dict(xml_dict):
     """
     return dict(Counter(x for xs in list(xml_dict.values()) for x in xs))
 
-def get_classes(project_name, project_run):
-    """
-    Returns the distinct classes in the data
-    """
-    return read_json(f'projects/{project_name}/outputs/{project_run}', 'run_params')['classes']
-
 def get_boxes_labels(xml_path, classes):
     # read in the xml
     tree = ET.parse(xml_path).getroot()
