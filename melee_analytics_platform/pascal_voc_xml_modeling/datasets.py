@@ -5,8 +5,8 @@ import os
 import glob as glob
 from xml.etree import ElementTree as et
 from torch.utils.data import Dataset, DataLoader
-from custom_utils import collate_fn, get_train_transform, get_valid_transform
-from data_utils import get_classes
+from melee_analytics_platform.pascal_voc_xml_modeling.custom_utils import collate_fn, get_train_transform, get_valid_transform
+from melee_analytics_platform.pascal_voc_xml_modeling.data_utils import get_classes
 # the dataset class
 class CustomDataset(Dataset):
     def __init__(self, project_name, project_run, width, height, img_list, transforms=None):

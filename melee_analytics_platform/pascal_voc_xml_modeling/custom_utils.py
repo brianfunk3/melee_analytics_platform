@@ -4,8 +4,8 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 from albumentations.pytorch import ToTensorV2
-from config import DEVICE
-from data_utils import get_classes
+from melee_analytics_platform.pascal_voc_xml_modeling.config import DEVICE
+from melee_analytics_platform.pascal_voc_xml_modeling.data_utils import get_classes
 plt.style.use('ggplot')
 # this class keeps track of the training and validation loss values...
 # ... and helps to get the average for each epoch as well

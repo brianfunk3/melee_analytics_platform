@@ -1,9 +1,9 @@
-from config import DEVICE
-from model import create_model, predict_on_images, get_testing_loss
-from data_utils import get_classes, train_test_split, write_json, read_json, update_json
-from custom_utils import Averager, SaveBestModel, save_model, save_loss_plot
+from melee_analytics_platform.pascal_voc_xml_modeling.config import DEVICE
+from melee_analytics_platform.pascal_voc_xml_modeling.model import create_model, predict_on_images, get_testing_loss
+from melee_analytics_platform.pascal_voc_xml_modeling.data_utils import get_classes, train_test_split, write_json, read_json, update_json
+from melee_analytics_platform.pascal_voc_xml_modeling.custom_utils import Averager, SaveBestModel, save_model, save_loss_plot
 from tqdm.auto import tqdm
-from datasets import (
+from melee_analytics_platform.pascal_voc_xml_modeling.datasets import (
     create_train_dataset, create_valid_dataset, 
     create_train_loader, create_valid_loader
 )

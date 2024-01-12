@@ -5,12 +5,12 @@ import cv2
 import torch
 import glob as glob
 from tqdm.auto import tqdm
-from custom_utils import Averager, SaveBestModel, save_model, save_loss_plot
+from melee_analytics_platform.pascal_voc_xml_modeling.custom_utils import Averager, SaveBestModel, save_model, save_loss_plot
 import os
 import time
-from datasets import create_valid_dataset, create_valid_loader
-from data_utils import get_classes, train_test_split, read_json, get_boxes_labels, update_json
-from config import DEVICE
+from melee_analytics_platform.pascal_voc_xml_modeling.datasets import create_valid_dataset, create_valid_loader
+from melee_analytics_platform.pascal_voc_xml_modeling.data_utils import get_classes, train_test_split, read_json, get_boxes_labels, update_json
+from melee_analytics_platform.pascal_voc_xml_modeling.config import DEVICE
 
 def create_model(num_classes):
     """Create a default FasterCNN model with num_classes number of classes"""
