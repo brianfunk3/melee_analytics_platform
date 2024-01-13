@@ -119,14 +119,12 @@ class Model():
         Given an image and project name, make some predictions and return it.
         image is already a lil numpy thing
         """
-        print(detection_threshold)
         # check if we need to switch to eval mode
         if self.model.training:
             self.model.eval()
 
         # BGR to RGB
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
-        cv2.imwrite('my_image.jpg', image)
         
         # make the pixel range between 0 and 1
         image /= 255.0

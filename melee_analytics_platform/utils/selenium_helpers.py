@@ -22,7 +22,7 @@ def buildHeadless():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-browser-side-navigation")
     options.add_argument("--disable-gpu")
-    # driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+    options.add_argument("--mute-audio")
     driver = webdriver.Chrome(service = Service(ChromeDriverManager().install()), options = options)
     driver.set_page_load_timeout(5)
 

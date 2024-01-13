@@ -53,9 +53,10 @@ def list_video_streams(url):
         try:
             meta_data = ydl.extract_info(url, download=False)
         except:
-            return None, None, None
+            return None, None, None, None
         # get the total number of frames in the video
-        duration = meta_data['duration'] * meta_data['fps']
+        duration = meta_data['duration'] 
+        fps = meta_data['fps']
         # organize the valid streams
         streams = [VideoStream(format) for format in meta_data['formats'][::-1] if format['vcodec'] != 'none' and 'format_note' in format]
         # and do the same for the resolutions in a kind of janky way
@@ -65,7 +66,7 @@ def list_video_streams(url):
         # and once more for resolutions
         resolutions = np.array([stream.resolution for stream in streams])
         # send em all
-        return streams[::-1], resolutions[::-1], duration
+        return streams[::-1], resolutions[::-1], duration, fps
 
 def cap_from_youtube(url, resolution=None):
     """
@@ -80,20 +81,20 @@ def cap_from_youtube(url, resolution=None):
     Returns: cv2.VideoCapture, duration: int
     """
     # grab all the streams, resolutions, and the duration
-    streams, resolutions, duration = list_video_streams(url)
+    streams, resolutions, duration, fps = list_video_streams(url)
     # if the video is unavailable, get us out of here
     if streams is None:
-        return None, None
+        return None, None, None
     # this is usually our exit, get the best option since it's sorted
     if not resolution or resolution == 'best':
-        return cv2.VideoCapture(streams[-1].url), duration
+        return cv2.VideoCapture(streams[-1].url), duration, fps
     # raise error if some is too picky
     if resolution not in resolutions:
         raise ValueError(f'Resolution {resolution} not available')
     # find where the resolution we want is
     res_index = np.where(resolutions == resolution)[0][0]
     # now return the a capture for that stream, as well as the duration
-    return cv2.VideoCapture(streams[res_index].url), duration
+    return cv2.VideoCapture(streams[res_index].url), duration, fps
 
 def gen_random_nums(max_num, num_nums):
     """
@@ -120,12 +121,12 @@ def pull_rando_images(url, directory, num_images = 20):
     if directory.endswith('/') and not os.path.exists(f"{directory}"):
         os.makedirs(f"{directory}")
     # get the capture and the duration
-    cap, duration = cap_from_youtube(url)
+    cap, duration, fps = cap_from_youtube(url)
     # catch for bad times
     if cap is None:
         return
     # get the indices of the random images to pull
-    image_indices = gen_random_nums(duration, num_images)    
+    image_indices = gen_random_nums(duration*fps, num_images)    
     # now iterate through those indices and save them off
     for index in image_indices:
         cap.set(cv2.CAP_PROP_POS_FRAMES, index)

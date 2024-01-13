@@ -2,6 +2,7 @@ from melee_analytics_platform.utils.selenium_helpers import buildHeadless, getBy
 import time
 from PIL import Image
 import io
+import numpy as np
 
 class TwitchStreamer():
     """

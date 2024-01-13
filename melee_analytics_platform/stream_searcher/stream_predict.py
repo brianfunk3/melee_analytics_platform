@@ -16,4 +16,6 @@ class StreamPredict():
         self.detection_threshold = detection_threshold
 
     def predict(self):
-        return self.model.predict(image = cv2.cvtColor(np.array(self.streamer.get_img()), cv2.COLOR_RGB2BGR), detection_threshold = self.detection_threshold)
+        img = np.array(self.streamer.get_img())
+        boxes, scores, classes = self.model.predict(image = img, detection_threshold = self.detection_threshold)
+        return img, boxes, scores, classes
