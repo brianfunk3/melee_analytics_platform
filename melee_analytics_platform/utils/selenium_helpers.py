@@ -13,16 +13,17 @@ This is a file I've used for basically any webscraping I've done in the last lik
 fun projects like this
 """
 
-def buildHeadless():
+def buildHeadless(headless = True):
     options = ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("start-maximized")
     options.add_argument("enable-automation")
-    options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-browser-side-navigation")
     options.add_argument("--disable-gpu")
     options.add_argument("--mute-audio")
+    if headless:
+        options.add_argument("--headless")
     driver = webdriver.Chrome(service = Service(ChromeDriverManager().install()), options = options)
     driver.set_page_load_timeout(5)
 
